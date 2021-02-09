@@ -59,7 +59,7 @@ public class MySQLExportSettings extends AbstractImportExportSettings<DBSObject>
     private boolean noData;
     private boolean showViews;
     private boolean overrideCredentials;
-    private boolean disableColumnStatistics;
+    private int mysqldumpMajorVersion;
 
     public List<MySQLDatabaseExportInfo> exportObjects = new ArrayList<>();
 
@@ -312,16 +312,15 @@ public class MySQLExportSettings extends AbstractImportExportSettings<DBSObject>
         if (fullVersion == null) {
             return;
         }
-        int majorVersion;
         try {
-            majorVersion = Integer.parseInt(fullVersion.split("\\.")[0]);
+            mysqldumpMajorVersion = Integer.parseInt(fullVersion.split("\\.")[0]);
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            return;
+            //ignore
         }
-        disableColumnStatistics = majorVersion == 8;
     }
 
-    boolean isDisableColumnStatistics() {
-        return disableColumnStatistics;
+    //returns 0 if version is unknown
+    int getMysqldumpMajorVersion() {
+        return mysqldumpMajorVersion;
     }
 }
